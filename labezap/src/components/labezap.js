@@ -12,10 +12,9 @@ const Strong = styled.strong `
 margin-right: 8px;
 color: #FFFFFF;
 `
-let listaDeMensagens = "eu"
 const DivEscrita = styled.div `
         background-color: ${props => {
-            if(listaDeMensagens === "eu") {
+            if(props.user === "eu") {
                 return 'yellow'
             } else {
                 return '#488FFA'
@@ -97,8 +96,10 @@ class Labezap extends React.Component {
         if(window.confirm(`Deseja realmente apagar esta mensagem?`)) {
             apagaMensagem = this.state.mensagemUsuario.filter((elm, idx, arr) => {
                 return elm.id !== idRemovido
-             })
-         }
+            })
+        }else{
+            return this.state.mensagemUsuario
+        }
          this.setState({mensagemUsuario: apagaMensagem})
     }
 
@@ -113,12 +114,20 @@ class Labezap extends React.Component {
 
     render() {
 
-        listaDeMensagens = this.state.mensagemUsuario.map(elm => {
-            return (
-                <DivEscrita key={elm.id} onDoubleClick={()=>this.alertDoubleClick(elm.id)}>
-                    <Strong>{elm.Usuario}: </Strong> {elm.Mensagem}
-                </DivEscrita>
-            )
+         const listaDeMensagens = this.state.mensagemUsuario.map(elm => {
+            if(elm.Usuario === "eu"){
+                return (
+                    <DivEscrita user= "eu" key={elm.id} onDoubleClick={()=>this.alertDoubleClick(elm.id)}>
+                        {elm.Mensagem}
+                    </DivEscrita>
+                )
+            }else{
+                return (
+                    <DivEscrita user= "outro" key={elm.id} onDoubleClick={()=>this.alertDoubleClick(elm.id)}>
+                        <Strong>{elm.Usuario}: </Strong> {elm.Mensagem}
+                    </DivEscrita>
+                )
+            }
         })
         
     return(
